@@ -23,16 +23,25 @@ function initMap() {
 }
 
 function updateLocation() {
-    // Aquí debes obtener la ubicación actual del GPS 303F
-    // Puedes hacer una solicitud a un servidor que te devuelva las coordenadas
-    fetch('https://tuservidor.com/ubicacion')
-        .then(response => response.json())
+    // URL del servidor que proporciona las coordenadas del GPS 303F
+    const url = 'https://tuservidor.com/ubicacion';
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener la ubicación');
+            }
+            return response.json();
+        })
         .then(data => {
             const newPosition = { lat: data.lat, lng: data.lng };
             marker.setPosition(newPosition);
             map.setCenter(newPosition);
         })
-        .catch(error => console.error('Error al obtener la ubicación:', error));
+        .catch(error => {
+            console.error('Error al obtener la ubicación:', error);
+            alert('No se pudo obtener la ubicación. Inténtalo de nuevo más tarde.');
+        });
 }
 
 window.initMap = initMap;
